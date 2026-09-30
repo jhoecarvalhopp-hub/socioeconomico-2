@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Perfil Escolar | Questionário Socioeconômico</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f4f6f9;
+            --card: #ffffff;
+            --text: #172033;
+            --muted: #687386;
+            --primary: #315efb;
+            --primary-dark: #2448c7;
+            --border: #e4e8ef;
+            --success: #16a34a;
+            --shadow: 0 10px 30px rgba(20, 30, 50, 0.08);
+
+            --c1: #315efb;
+            --c2: #8b5cf6;
+            --c3: #06b6d4;
+            --c4: #f59e0b;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* TOPO */
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-content {
+            max-width: 1250px;
+            margin: auto;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo h1 {
+            font-size: 18px;
+        }
+
+        .logo span {
+            display: block;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .counter {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--primary);
+            background: #eef2ff;
+            padding: 9px 14px;
+            border-radius: 20px;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            width: min(1150px, calc(100% - 32px));
+            margin: 30px auto 60px;
+        }
+
+        /* HERO */
+
+        .hero {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 35px;
+            box-shadow: var(--shadow);
+            margin-bottom: 22px;
+        }
+
+        .hero-label {
+            display: inline-block;
+            color: var(--primary);
+            background: #eef2ff;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .hero h2 {
+            font-size: clamp(27px, 4vw, 42px);
+            line-height: 1.1;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            max-width: 800px;
+            color: var(--muted);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        /* PROGRESSO */
+
+        .progress-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .progress-background {
+            width: 100%;
+            height: 10px;
+            background: #e9edf3;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: var(--primary);
+            border-radius: 20px;
+            transition: width 0.3s ease;
+        }
+
+        /* CATEGORIA */
+
+        .category-title {
+            margin: 35px 0 15px;
+        }
+
+        .category-title h3 {
+            font-size: 23px;
+            margin-bottom: 5px;
+        }
+
+        .category-title p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* QUESTÃO */
+
+        .question-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 24px;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 20px rgba(20, 30, 50, 0.05);
+        }
+
+        .question-number {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .question-title {
+            font-size: 17px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .option {
+            position: relative;
+        }
+
+        .option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .option label {
+            display: flex;
+            align-items: center;
+            min-height: 52px;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            background: #fff;
+            font-size: 14px;
+        }
+
+        .option label:hover {
+            border-color: var(--primary);
+            background: #f8faff;
+        }
+
+        .option input:checked + label {
+            border-color: var(--primary);
+            background: #eef2ff;
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        /* RESULTADO DA QUESTÃO */
+
+        .question-result {
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .chart {
+            width: 110px;
+            height: 110px;
+            min-width: 110px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--c1) 0deg 90deg,
+                var(--c2) 90deg 180deg,
+                var(--c3) 180deg 270deg,
+                var(--c4) 270deg 360deg
+            );
+            position: relative;
+        }
+
+        .chart::after {
+            content: "";
+            position: absolute;
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background: white;
+            top: 24px;
+            left: 24px;
+        }
+
+        .chart-center {
+            position: absolute;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .legend {
+            display: grid;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .legend-name {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: var(--muted);
+        }
+
+        .legend-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .percentage {
+            font-weight: bold;
+        }
+
+        /* BOTÕES */
+
+        .actions {
+            margin-top: 35px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            border-radius: 12px;
+            padding: 14px 22px;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #394150;
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: #f7f8fa;
+        }
+
+        /* RESULTADO FINAL */
+
+        .final-result {
+            display: none;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 35px;
+            margin-top: 30px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .final-result.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 65px;
+            height: 65px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: #dcfce7;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .final-result h3 {
+            font-size: 25px;
+            margin-bottom: 10px;
+        }
+
+        .final-result p {
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* AVISO */
+
+        .privacy {
+            margin-top: 25px;
+            padding: 16px;
+            border-radius: 12px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* RODAPÉ */
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            padding: 30px 20px;
+        }
+
+        /* RESPONSIVO */
+
+        @media (max-width: 700px) {
+
+            .topbar-content {
+                padding: 12px 16px;
+            }
+
+            .container {
+                width: min(100% - 20px, 1150px);
+                margin-top: 18px;
+            }
+
+            .hero {
+                padding: 25px 20px;
+                border-radius: 17px;
+            }
+
+            .question-card {
+                padding: 18px;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .question-result {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .chart {
+                margin: auto;
+            }
+
+            .logo span {
+                display: none;
+            }
+
+            .logo h1 {
+                font-size: 15px;
+            }
+
+            .counter {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="topbar-content">
+
+        <div class="logo">
+            <div class="logo-icon">PE</div>
+
+            <div>
+                <h1>Perfil Escolar</h1>
+                <span>Questionário socioeconômico</span>
+            </div>
+        </div>
+
+        <div class="counter" id="counter">
+            0 / 30 respondidas
+        </div>
+
+    </div>
+</header>
+
+
+<main class="container">
+
+    <section class="hero">
+
+        <span class="hero-label">QUESTIONÁRIO ESCOLAR</span>
+
+        <h2>
+            Conhecer o perfil dos estudantes também é transformar a escola.
+        </h2>
+
+        <p>
+            Este questionário foi desenvolvido para reunir informações
+            educacionais, pessoais e profissionais de forma organizada.
+            As respostas podem ser utilizadas para análises estatísticas
+            e planejamento de ações educacionais.
+        </p>
+
+        <div class="privacy">
+            <strong>Privacidade:</strong>
+            não informe nome completo, CPF, endereço, telefone ou outras
+            informações que identifiquem diretamente você. Utilize os dados
+            apenas de acordo com as regras estabelecidas pela escola.
+        </div>
+
+    </section>
+
+
+    <section class="progress-card">
+
+        <div class="progress-info">
+            <span>Progresso</span>
+            <span id="progressText">0%</span>
+        </div>
+
+        <div class="progress-background">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+    </section>
+
+
+    <div id="questionnaire"></div>
+
+
+    <div class="actions">
+
+        <button
+            class="btn-primary"
+            type="button"
+            onclick="finalizarQuestionario()">
+            Finalizar questionário
+        </button>
+
+        <button
+            class="btn-secondary"
+            type="button"
+            onclick="limparQuestionario()">
+            Limpar respostas
+        </button>
+
+    </div>
+
+
+    <section class="final-result" id="finalResult">
+
+        <div class="success-icon">
+            ✓
+        </div>
+
+        <h3>Questionário concluído!</h3>
+
+        <p>
+            Todas as perguntas foram respondidas.
+            As respostas foram salvas neste dispositivo.
+        </p>
+
+    </section>
+
+</main>
+
+
+<footer>
+    Questionário de Perfil Escolar • Projeto educacional
+</footer>
+
+
+<script>
+
+    /*
+     * BANCO DE QUESTÕES
+     */
+
+    const perguntas = [
+
+        // =========================
+        // PESSOAL
+        // =========================
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Qual é a sua faixa etária?",
+            opcoes: [
+                "Até 14 anos",
+                "15 a 16 anos",
+                "17 a 18 anos",
+                "19 anos ou mais"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Quantas pessoas moram com você?",
+            opcoes: [
+                "Moro sozinho(a)",
+                "1 pessoa",
+                "2 a 4 pessoas",
+                "5 pessoas ou mais"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Qual é a situação da sua moradia?",
+            opcoes: [
+                "Própria",
+                "Alugada",
+                "Cedida",
+                "Outra situação"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Como é o seu acesso à internet em casa?",
+            opcoes: [
+                "Internet fixa",
+                "Internet principalmente móvel",
+                "Internet limitada",
+                "Não tenho acesso"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Qual equipamento você utiliza principalmente para estudar?",
+            opcoes: [
+                "Celular",
+                "Computador ou notebook",
+                "Tablet",
+                "Não possuo equipamento"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Quantas pessoas contribuem para a renda da sua residência?",
+            opcoes: [
+                "Nenhuma",
+                "1 pessoa",
+                "2 pessoas",
+                "3 pessoas ou mais"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Como você normalmente vai para a escola?",
+            opcoes: [
+                "A pé",
+                "Transporte público",
+                "Transporte escolar",
+                "Carro ou moto"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Você possui um espaço adequado para estudar em casa?",
+            opcoes: [
+                "Sim",
+                "Às vezes",
+                "Tenho pouco espaço",
+                "Não"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Com que frequência você tem acesso a livros ou materiais de leitura?",
+            opcoes: [
+                "Sempre",
+                "Frequentemente",
+                "Às vezes",
+                "Raramente"
+            ]
+        },
+
+        {
+            categoria: "Pessoal",
+            pergunta: "Qual é a sua principal dificuldade para estudar?",
+            opcoes: [
+                "Falta de tempo",
+                "Falta de recursos",
+                "Falta de espaço adequado",
+                "Não tenho grandes dificuldades"
+            ]
+        },
+
+
+        // =========================
+        // EDUCACIONAL
+        // =========================
+
+        {
+            categoria: "Educacional",
+            pergunta: "Qual é aproximadamente o maior nível de escolaridade dos seus responsáveis?",
+            opcoes: [
+                "Ensino fundamental",
+                "Ensino médio",
+                "Ensino superior",
+                "Não sei informar"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "Quantas horas por semana você costuma dedicar aos estudos fora da escola?",
+            opcoes: [
+                "Menos de 2 horas",
+                "2 a 5 horas",
+                "6 a 10 horas",
+                "Mais de 10 horas"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "Com que frequência você utiliza a internet para estudar?",
+            opcoes: [
+                "Sempre",
+                "Frequentemente",
+                "Às vezes",
+                "Nunca"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "Qual recurso você mais utiliza para estudar?",
+            opcoes: [
+                "Vídeos e aulas online",
+                "Livros e apostilas",
+                "Aplicativos",
+                "Exercícios e questões"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "O que você pretende fazer depois do ensino médio?",
+            opcoes: [
+                "Entrar em uma universidade",
+                "Fazer um curso técnico",
+                "Ainda não sei",
+                "Não pretendo continuar os estudos"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "Você pretende realizar o ENEM?",
+            opcoes: [
+                "Sim",
+                "Talvez",
+                "Já realizei",
+                "Não"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "Como você avalia seu desempenho escolar?",
+            opcoes: [
+                "Muito bom",
+                "Bom",
+                "Regular",
+                "Preciso melhorar"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "Em qual área você encontra mais dificuldade?",
+            opcoes: [
+                "Matemática",
+                "Ciências da Natureza",
+                "Linguagens",
+                "Ciências Humanas"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "Você participa de atividades extracurriculares?",
+            opcoes: [
+                "Sim, frequentemente",
+                "Às vezes",
+                "Raramente",
+                "Não"
+            ]
+        },
+
+        {
+            categoria: "Educacional",
+            pergunta: "Você tem interesse em fazer um curso superior?",
+            opcoes: [
+                "Sim",
+                "Talvez",
+                "Ainda não decidi",
+                "Não"
+            ]
+        },
+
+
+        // =========================
+        // PROFISSIONAL
+        // =========================
+
+        {
+            categoria: "Profissional",
+            pergunta: "Você exerce atualmente alguma atividade profissional?",
+            opcoes: [
+                "Trabalho regularmente",
+                "Trabalho ocasionalmente",
+                "Faço estágio",
+                "Não"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "Você possui ou pretende fazer algum curso profissionalizante?",
+            opcoes: [
+                "Sim",
+                "Estou realizando",
+                "Pretendo fazer",
+                "Não"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "Qual área profissional mais desperta seu interesse?",
+            opcoes: [
+                "Tecnologia",
+                "Saúde",
+                "Direito e Administração",
+                "Engenharia e Ciências"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "Você pretende trabalhar durante a faculdade?",
+            opcoes: [
+                "Sim",
+                "Provavelmente",
+                "Ainda não sei",
+                "Não"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "Você já possui alguma experiência profissional?",
+            opcoes: [
+                "Sim",
+                "Pouca experiência",
+                "Experiência de estágio",
+                "Não"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "O que você considera mais importante em uma profissão?",
+            opcoes: [
+                "Estabilidade",
+                "Boa remuneração",
+                "Trabalhar com algo que gosto",
+                "Empreender"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "Você pretende trabalhar na mesma cidade onde mora?",
+            opcoes: [
+                "Sim",
+                "Talvez",
+                "Pretendo me mudar",
+                "Ainda não sei"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "Você possui acesso a cursos profissionalizantes gratuitos?",
+            opcoes: [
+                "Sim",
+                "Não",
+                "Não sei",
+                "Acesso limitado"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "Qual a importância de fazer cursos além da escola?",
+            opcoes: [
+                "Muito importante",
+                "Importante",
+                "Pouco importante",
+                "Não considero necessário"
+            ]
+        },
+
+        {
+            categoria: "Profissional",
+            pergunta: "Qual é atualmente o seu principal objetivo profissional?",
+            opcoes: [
+                "Conseguir um emprego",
+                "Entrar na universidade",
+                "Abrir um negócio",
+                "Ainda estou decidindo"
+            ]
+        }
+
+    ];
+
+
+    /*
+     * VERIFICAÇÃO
+     */
+
+    if (perguntas.length !== 30) {
+        console.error(
+            "Erro: o questionário deveria possuir 30 perguntas, mas possui "
+            + perguntas.length + "."
+        );
+    }
+
+
+    /*
+     * RESPOSTAS
+     */
+
+    let respostas = JSON.parse(
+        localStorage.getItem("perfilEscolarRespostas")
+    ) || {};
+
+
+    /*
+     * CRIAÇÃO DO QUESTIONÁRIO
+     */
+
+    function criarQuestionario() {
+
+        const container = document.getElementById("questionnaire");
+
+        container.innerHTML = "";
+
+        let categoriaAtual = "";
+
+        perguntas.forEach((item, indice) => {
+
+            if (item.categoria !== categoriaAtual) {
+
+                categoriaAtual = item.categoria;
+
+                const categoria = document.createElement("div");
+
+                categoria.className = "category-title";
+
+                categoria.innerHTML = `
+                    <h3>${categoriaAtual}</h3>
+                    <p>
+                        Responda às perguntas desta categoria.
+                    </p>
+                `;
+
+                container.appendChild(categoria);
+            }
+
+
+            const card = document.createElement("div");
+
+            card.className = "question-card";
+
+            const numero = indice + 1;
+
+            let opcoesHTML = "";
+
+            item.opcoes.forEach((opcao, opcaoIndex) => {
+
+                const id = `q${numero}_op${opcaoIndex}`;
+
+                const selecionada =
+                    respostas[numero] === opcaoIndex
+                    ? "checked"
+                    : "";
+
+                opcoesHTML += `
+                    <div class="option">
+
+                        <input
+                            type="radio"
+                            id="${id}"
+                            name="question${numero}"
+                            value="${opcaoIndex}"
+                            ${selecionada}
+                            onchange="registrarResposta(${numero}, ${opcaoIndex})"
+                        >
+
+                        <label for="${id}">
+                            ${opcao}
+                        </label>
+
+                    </div>
+                `;
+            });
+
+
+            card.innerHTML = `
+
+                <div class="question-number">
+                    Questão ${numero}
+                </div>
+
+                <div class="question-title">
+                    ${item.pergunta}
+                </div>
+
+                <div class="options">
+                    ${opcoesHTML}
+                </div>
+
+                <div class="question-result">
+
+                    <div
+                        class="chart"
+                        id="chart${numero}"
+                    >
+                        <div
+                            class="chart-center"
+                            id="chartCenter${numero}">
+                            0%
+                        </div>
+                    </div>
+
+                    <div
+                        class="legend"
+                        id="legend${numero}">
+                    </div>
+
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+
+
+        atualizarTudo();
+    }
+
+
+    /*
+     * REGISTRAR RESPOSTA
+     */
+
+    function registrarResposta(numero, opcao) {
+
+        respostas[numero] = opcao;
+
+        localStorage.setItem(
+            "perfilEscolarRespostas",
+            JSON.stringify(respostas)
+        );
+
+        atualizarTudo();
+    }
+
+
+    /*
+     * CONTAR RESPOSTAS
+     */
+
+    function obterEstatisticas(numero) {
+
+        const contagem = [
+            0,
+            0,
+            0,
+            0
+        ];
+
+        Object.keys(respostas).forEach(chave => {
+
+            if (Number(chave) === numero) {
+
+                const opcao = respostas[chave];
+
+                if (
+                    opcao !== undefined &&
+                    opcao >= 0 &&
+                    opcao < 4
+                ) {
+                    contagem[opcao]++;
+                }
+            }
+        });
+
+        /*
+         * Cada gráfico de pergunta mostra
+         * a distribuição daquela pergunta.
+         *
+         * Como existe apenas uma resposta por usuário
+         * neste dispositivo, o gráfico terá a opção
+         * selecionada em 100%.
+         */
+
+        if (respostas[numero] !== undefined) {
+
+            const indice = respostas[numero];
+
+            return contagem;
+        }
+
+        return [0, 0, 0, 0];
+    }
+
+
+    /*
+     * ATUALIZAR GRÁFICO
+     */
+
+    function atualizarGrafico(numero) {
+
+        const chart = document.getElementById(
+            `chart${numero}`
+        );
+
+        const center = document.getElementById(
+            `chartCenter${numero}`
+        );
+
+        const legend = document.getElementById(
+            `legend${numero}`
+        );
+
+        if (!chart || !center || !legend) {
+            return;
+        }
+
+
+        const valores = obterEstatisticas(numero);
+
+        const total = valores.reduce(
+            (a, b) => a + b,
+            0
+        );
+
+
+        if (total === 0) {
+
+            chart.style.background =
+                "conic-gradient(#e5e7eb 0deg 360deg)";
+
+            center.textContent = "0%";
+
+        } else {
+
+            const porcentagens = valores.map(valor =>
+                (valor / total) * 100
+            );
+
+            let inicio = 0;
+
+            const cores = [
+                "var(--c1)",
+                "var(--c2)",
+                "var(--c3)",
+                "var(--c4)"
+            ];
+
+            const partes = [];
+
+            porcentagens.forEach((porcentagem, index) => {
+
+                const fim =
+                    inicio + (porcentagem * 3.6);
+
+                partes.push(
+                    `${cores[index]} ${inicio}deg ${fim}deg`
+                );
+
+                inicio = fim;
+            });
+
+            chart.style.background =
+                `conic-gradient(${partes.join(", ")})`;
+
+
+            const selecionada = respostas[numero];
+
+            if (selecionada !== undefined) {
+
+                center.textContent = "100%";
+
+            } else {
+
+                center.textContent = "0%";
+            }
+        }
+
+
+        legend.innerHTML = "";
+
+
+        perguntas[numero - 1].opcoes.forEach(
+            (opcao, index) => {
+
+                const percentual =
+                    total === 0
+                    ? 0
+                    : Math.round(
+                        (valores[index] / total) * 100
+                    );
+
+
+                const item = document.createElement("div");
+
+                item.className = "legend-item";
+
+                item.innerHTML = `
+
+                    <span class="legend-name">
+
+                        <span
+                            class="legend-dot"
+                            style="
+                                background:
+                                ${[
+                                    "var(--c1)",
+                                    "var(--c2)",
+                                    "var(--c3)",
+                                    "var(--c4)"
+                                ][index]};
+                            ">
+                        </span>
+
+                        ${opcao}
+
+                    </span>
+
+                    <span class="percentage">
+                        ${percentual}%
+                    </span>
+                `;
+
+                legend.appendChild(item);
+            }
+        );
+    }
+
+
+    /*
+     * ATUALIZAR PROGRESSO
+     */
+
+    function atualizarProgresso() {
+
+        const respondidas =
+            Object.keys(respostas).filter(chave => {
+
+                return (
+                    respostas[chave] !== undefined &&
+                    respostas[chave] !== null
+                );
+
+            }).length;
+
+
+        const porcentagem =
+            Math.round(
+                (respondidas / perguntas.length) * 100
+            );
+
+
+        document.getElementById("counter").textContent =
+            `${respondidas} / ${perguntas.length} respondidas`;
+
+
+        document.getElementById("progressText").textContent =
+            `${porcentagem}%`;
+
+
+        document.getElementById("progressBar").style.width =
+            `${porcentagem}%`;
+    }
+
+
+    /*
+     * ATUALIZAR TUDO
+     */
+
+    function atualizarTudo() {
+
+        atualizarProgresso();
+
+        perguntas.forEach((_, index) => {
+
+            atualizarGrafico(index + 1);
+
+        });
+    }
+
+
+    /*
+     * FINALIZAR
+     */
+
+    function finalizarQuestionario() {
+
+        const respondidas =
+            Object.keys(respostas).filter(chave => {
+
+                return (
+                    respostas[chave] !== undefined &&
+                    respostas[chave] !== null
+                );
+
+            }).length;
+
+
+        if (respondidas < perguntas.length) {
+
+            const faltam =
+                perguntas.length - respondidas;
+
+            alert(
+                `Você ainda precisa responder ${faltam} questão(ões).`
+            );
+
+            return;
+        }
+
+
+        const resultado =
+            document.getElementById("finalResult");
+
+        resultado.classList.add("show");
+
+        resultado.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+
+
+    /*
+     * LIMPAR
+     */
+
+    function limparQuestionario() {
+
+        const confirmar = confirm(
+            "Tem certeza que deseja apagar todas as respostas?"
+        );
+
+        if (!confirmar) {
+            return;
+        }
+
+
+        respostas = {};
+
+        localStorage.removeItem(
+            "perfilEscolarRespostas"
+        );
+
+
+        document.getElementById(
+            "finalResult"
+        ).classList.remove("show");
+
+
+        criarQuestionario();
+    }
+
+
+    /*
+     * INICIAR
+     */
+
+    criarQuestionario();
+
+</script>
+
+</body>
+</html>
